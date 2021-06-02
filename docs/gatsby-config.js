@@ -81,6 +81,7 @@ const config = {
               wrapperStyle: 'margin-bottom: 24px'
             }
           },
+          `gatsby-remark-mathjax`,
           {
             resolve: 'gatsby-remark-find-replace',
             options: {
