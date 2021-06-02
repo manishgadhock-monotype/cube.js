@@ -193,10 +193,20 @@ CUBEJS_EXT_DB_TYPE=<SUPPORTED_DB_TYPE_HERE>
 
 <!-- prettier-ignore-start -->
 [[warning |]]
-| Please be aware of the limitations when using internal and external (outside of Cube Store) pre-aggregations.
+| Please be aware of the limitations when using internal and external (outside
+| of Cube Store) pre-aggregations.
 <!-- prettier-ignore-end -->
 
-![](https://raw.githubusercontent.com/cube-js/cube.js/master/docs/content/Caching/pre-aggregations.png)
+<div
+  style="text-align: center"
+>
+  <img
+  alt="Internal vs External vs External with Cube Store diagram"
+  src="https://raw.githubusercontent.com/cube-js/cube.js/master/docs/content/Caching/pre-aggregations.png"
+  style="border: none"
+  width="100%"
+  />
+</div>
 
 #### Some known limitations when using Postgres/MySQL as a storage layer listed below.
 
@@ -244,6 +254,25 @@ slow to return results.
 **Cost:** Some databases charge by the amount of data scanned for each query
 (such as AWS Athena and BigQuery). Repeatedly querying for this data can easily
 rack up costs.
+
+## Large Pre-Aggregations
+
+When dealing with larger pre-aggregations (more than 500k rows), we can
+significantly improve performance by "unloading" data from the source database
+into cloud storage, which is then loaded into Cube Store:
+
+[![](https://mermaid.ink/img/eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgQ3ViZS5qcy0-PitTb3VyY2UgRGF0YWJhc2U6IHJ1biBVTkxPQUQgcXVlcnlcbiAgICBTb3VyY2UgRGF0YWJhc2UtPj4rQ2xvdWQgU3RvcmFnZTogbWF0ZXJpYWxpemUgZGF0YSBmcm9tIHF1ZXJ5XG4gICAgQ3ViZSBTdG9yZS0-PitDbG91ZCBTdG9yYWdlOiBsb2FkIG1hdGVyaWFsaXplZCBkYXRhXG4gICAgQ3ViZS5qcy0-PitDdWJlIFN0b3JlOiBxdWVyeSBwcmUtYWdncmVnYXRpb25zXG4gICAgQ3ViZSBTdG9yZS0tPj4tQ3ViZS5qczogcmV0dXJuIHF1ZXJ5IHJlc3VsdHNcbiAgICAgICAgICAgICIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In0sInVwZGF0ZUVkaXRvciI6ZmFsc2UsImF1dG9TeW5jIjp0cnVlLCJ1cGRhdGVEaWFncmFtIjpmYWxzZX0)](https://mermaid-js.github.io/mermaid-live-editor/edit/##eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgQ3ViZS5qcy0-PitTb3VyY2UgRGF0YWJhc2U6IHJ1biBVTkxPQUQgcXVlcnlcbiAgICBTb3VyY2UgRGF0YWJhc2UtPj4rQ2xvdWQgU3RvcmFnZTogbWF0ZXJpYWxpemUgZGF0YSBmcm9tIHF1ZXJ5XG4gICAgQ3ViZSBTdG9yZS0-PitDbG91ZCBTdG9yYWdlOiBsb2FkIG1hdGVyaWFsaXplZCBkYXRhXG4gICAgQ3ViZS5qcy0-PitDdWJlIFN0b3JlOiBxdWVyeSBwcmUtYWdncmVnYXRpb25zXG4gICAgQ3ViZSBTdG9yZS0tPj4tQ3ViZS5qczogcmV0dXJuIHF1ZXJ5IHJlc3VsdHNcblxuICAgICAgICAgICAgIiwibWVybWFpZCI6IntcbiAgXCJ0aGVtZVwiOiBcImRlZmF1bHRcIlxufSIsInVwZGF0ZUVkaXRvciI6ZmFsc2UsImF1dG9TeW5jIjp0cnVlLCJ1cGRhdGVEaWFncmFtIjpmYWxzZX0)
+
+For database-specific instructions, please refer to the relevant section in
+[Connecting to the Database][ref-config-connect-db].
+
+When using cloud storage, it is important to correctly configure any data
+retention policies so that data required for querying is available and has not
+been moved into deep storage, for example.
+
+[ref-config-connect-db]: /connecting-to-the-database
+
+> FIND OUT IF WE CAN UNLOAD AS PARQUET ON SUPPORTED DATABASES
 
 [wiki-partitioning]: https://en.wikipedia.org/wiki/Partition_(database)
 [ref-config-env]: /reference/environment-variables#cube-store
