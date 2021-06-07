@@ -37,7 +37,7 @@ API instances. **Redis** is used to manage the queue and query-level cache.
 
 API instances and Refresh Worker can be configured via
 [environment variables](/reference/environment-variables) or
-[cube.js configuration file](/config). The also need access to the data schema
+[cube.js configuration file](/config). They also need access to the data schema
 files.
 
 Cube Store cluster can be configured via environment variables.
